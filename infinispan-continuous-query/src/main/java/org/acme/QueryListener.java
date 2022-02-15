@@ -2,13 +2,13 @@ package org.acme;
 
 import org.infinispan.query.api.continuous.ContinuousQueryListener;
 
-public class QueryListener implements ContinuousQueryListener<String, Book> {
+public class QueryListener implements ContinuousQueryListener<String, Object[]> {
 
     public QueryListener() {
       
     }
     
-    public void resultJoining(String key, Object value) {
+    public void resultJoining(String key, Object[] value) {
         System.out.println("resultJoining "+key);
     }
  
@@ -19,7 +19,7 @@ public class QueryListener implements ContinuousQueryListener<String, Book> {
      * @param key   the key of the joining entry
      * @param value the joining entry or the Object[] projection if specified
      */
-     public void resultUpdated(String key, Book value) {
+     public void resultUpdated(String key, Object[] value) {
        System.out.println("resultUpdated "+key);
     }
  
