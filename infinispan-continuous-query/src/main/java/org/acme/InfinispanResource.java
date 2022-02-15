@@ -16,6 +16,8 @@ import org.infinispan.commons.util.CloseableIterator;
 
 import io.quarkus.infinispan.client.Remote;
 import io.quarkus.runtime.StartupEvent;
+import org.infinispan.query.dsl.Query;
+import org.infinispan.query.dsl.QueryFactory;
 
 @Path("/infinispan")
 public class InfinispanResource {
@@ -36,8 +38,10 @@ public class InfinispanResource {
    void init(@Observes StartupEvent e) {
 
       myBookCache = remoteCacheManager.administration().getOrCreateCache("myBookCache", new XMLStringConfiguration(String.format(CACHE_CONFIG, "myBookCache")));
-   
-      Search.getContinuousQuery(myBookCache).addContinuousQueryListener("select title from book_sample.Book ", new QueryListener());
+
+      QueryFactory queryFactory = Search.getQueryFactory(myBookCache);
+      Query query = queryFactory.create("select title from book_sample.Book");
+      Search.getContinuousQuery(myBookCache).addContinuousQueryListener(query, new QueryListener());
       
    }
 
